@@ -13,7 +13,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "quickfix-ai.quickfixAI",
+        "command": "quickfix-ai.solve",
         "title": "Quickfix AI"
       }
     ]

@@ -1,49 +1,77 @@
 import * as vscode from 'vscode'
 import * as dotenv from 'dotenv'
 import axios from 'axios'
+import { TextEncoder } from 'util'
 
 dotenv.config()
 
 export function activate(context: vscode.ExtensionContext) {
-	function getSolution() {
+	async function fetchSolution(input: string): Promise<string> {
+		const workspace = vscode.workspace.name
 
+		const documents = await readSourceCode()
+
+		const solution: string = await axios.post(`${process.env.BACKEND_API_URL}/workspaces/${workspace}`, {
+			documents: documents,
+			input: input
+		})
+
+		return solution
 	}
 
-	function readSourceCode() {
-		vscode.workspace.findFiles('**/*').then(async(files) => {
-			const workspace = vscode.workspace.name
-			const documents: string[] = []
+	async function readSourceCode(): Promise<string[]> {
+		const files = await vscode.workspace.findFiles('**/*')
 
-			for (const file of files) {
-				// Ignore if the file is listed in a .gitignore file
-				if (file.fsPath.includes('.gitignore')) {
-					continue
-				}
+		const documents: string[] = []
 
-				vscode.workspace.openTextDocument(file).then(document => {
-					documents.push(document.getText())
-				})
+		for (const file of files) {
+			// Ignore if the file is listed in a .gitignore file
+			if (file.fsPath.includes('.gitignore')) {
+				continue
 			}
 
-			axios.post(`${process.env.BACKEND_API_URL}/workspaces/${workspace}`, {
-				documents: documents
-			  })
-			  .then(function (response) {
-				console.log(response);
-			  })
-			  .catch(function (error) {
-				console.log(error);
-			  });
-		})
+			vscode.workspace.openTextDocument(file).then(document => {
+				documents.push(document.getText())
+			})
+		}
+
+		return documents
 	}
-	readSourceCode()
 
-	let disposable = vscode.commands.registerCommand('quickfix-ai.quickfixAI', () => {
-		// TODO: call getSolution
-		// vscode.window.showInformationMessage('Hello World from quickfix.ai!')
-	})
+	context.subscriptions.push(vscode.commands.registerCommand('quickfix-ai.solve', async () => {
+		const input = await vscode.window.showInputBox({ placeHolder: 'Paste the error...' });
+		if (input === undefined) {
+			vscode.window
+				.showInformationMessage('Paste the error for Quickfix AI to find the solution');
+			return
+		}
 
-	context.subscriptions.push(disposable)
+		const workspaceFolders = vscode.workspace.workspaceFolders
+
+		if (workspaceFolders === undefined || workspaceFolders.length === 0) {
+			vscode.window.showInformationMessage('Workspace Folder is not found');
+			return
+		}
+
+		const workspaceURI = workspaceFolders[0].uri
+		const fileURI = vscode.Uri.file(workspaceURI.path + "/solution-by-quickfix-ai.md")
+
+		vscode.window.withProgress({
+			location: vscode.ProgressLocation.Window,
+			cancellable: false,
+			title: 'Quickfix AI is generating a solution'
+		}, async (progress) => {
+			progress.report({  increment: 0 });
+			
+			const solution = await fetchSolution(input)
+			await vscode.workspace.fs.writeFile(fileURI, new TextEncoder().encode(solution));
+			await vscode.commands.executeCommand("markdown.showPreview", fileURI);
+			vscode.workspace.fs.delete(fileURI)
+			
+			progress.report({ increment: 100 });
+		});
+
+	}));
 }
 
-export function deactivate() {}
+export function deactivate() { }
