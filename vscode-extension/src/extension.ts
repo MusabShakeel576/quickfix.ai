@@ -8,13 +8,12 @@ dotenv.config()
 export function activate(context: vscode.ExtensionContext) {
 	async function fetchSolution(input: string): Promise<string> {
 		const workspace = vscode.workspace.name
-
 		const documents = await readSourceCode()
 
-		const solution: string = await axios.post(`${process.env.BACKEND_API_URL}/workspaces/${workspace}`, {
-			documents: documents,
-			input: input
-		})
+		const solution: string = await axios.post(
+			`${process.env.BACKEND_API_URL}/workspaces/${workspace}`,
+			{ input: input, documents: documents }
+		)
 
 		return solution
 	}
