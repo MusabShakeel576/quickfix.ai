@@ -1,21 +1,20 @@
 import * as vscode from 'vscode'
-import * as dotenv from 'dotenv'
 import axios from 'axios'
 import { TextEncoder } from 'util'
 
-dotenv.config()
+import { BACKEND_API_URL } from './env'
 
 export function activate(context: vscode.ExtensionContext) {
 	async function fetchSolution(input: string): Promise<string> {
-		const workspace = vscode.workspace.name
+		const workspaceName = vscode.workspace.name
 		const documents = await readSourceCode()
 
-		const solution: string = await axios.post(
-			`${process.env.BACKEND_API_URL}/workspaces/${workspace}`,
-			{ input: input, documents: documents }
+		const response = await axios.post(
+			`${BACKEND_API_URL}/workspace`,
+			{ name: workspaceName, input: input, documents: documents }
 		)
 
-		return solution
+		return response.data.solution.response
 	}
 
 	async function readSourceCode(): Promise<string[]> {
@@ -29,9 +28,8 @@ export function activate(context: vscode.ExtensionContext) {
 				continue
 			}
 
-			vscode.workspace.openTextDocument(file).then(document => {
-				documents.push(document.getText())
-			})
+			const document = await vscode.workspace.openTextDocument(file)
+			documents.push(document.getText())
 		}
 
 		return documents

@@ -10,6 +10,7 @@ python = "^3.10"
 fastapi = "^0.91.0"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 gpt-index = "^0.4.1"
+python-dotenv = "^0.21.1"
 
 
 [build-system]
