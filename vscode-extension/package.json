@@ -14,10 +14,10 @@
     "Other"
   ],
   "activationEvents": [
-		"*"
+		"onCommand:quickfix-ai.solve"
 	],
   "icon": "assets/icon.png",
-  "license": "SEE LICENSE IN PROJECT ROOT",
+  "license": "MIT",
   "main": "./out/extension.js",
   "repository": {
 		"type": "git",
