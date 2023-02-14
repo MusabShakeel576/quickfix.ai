@@ -6,13 +6,23 @@
   "engines": {
     "vscode": "^1.75.0"
   },
+  "author": {
+    "name": "Musab Shakil"
+  },
   "categories": [
+    "Machine Learning",
     "Other"
   ],
   "activationEvents": [
-		"onCommand:quickfix-ai.solve"
+		"*"
 	],
+  "icon": "assets/icon.png",
+  "license": "SEE LICENSE IN PROJECT ROOT",
   "main": "./out/extension.js",
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/MusabShakeel576/quickfix.ai"
+	},
   "contributes": {
     "commands": [
       {
@@ -21,6 +31,15 @@
       }
     ]
   },
+  "bugs": {
+		"url": "https://github.com/MusabShakeel576/quickfix.ai/issues"
+	},
+	"keywords": [
+		"ai",
+		"code",
+		"explanation",
+    "solution"
+	],
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
