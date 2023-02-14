@@ -9,6 +9,9 @@
   "categories": [
     "Other"
   ],
+  "activationEvents": [
+		"onCommand:quickfix-ai.solve"
+	],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
