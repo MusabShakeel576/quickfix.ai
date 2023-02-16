@@ -1,5 +1,6 @@
 <h1 align="center"><img align="center" height="30" src="assets/icon.png"> Quickfix AI (Alpha Release)</h1>
-<h2 align="center">Get Instant Error Solutions with GPT.</h2>
+
+<h3 align="center">Get Instant Error Solutions with GPT.</h3>
 
 ## Introduction 👋
 
@@ -12,8 +13,8 @@ With Quickfix AI, you can:
 - 🔍 Improve your coding skills with in-depth code analysis
 
 ## Demo 📽
-<!-- TODO: use correct gif and YouTube video -->
-[![demo video](https://github.com/MusabShakeel576/quickfix.ai/tree/main/vscode-extension/assets/demo.gif)](https://www.youtube.com/watch?v=demo)
+
+[![demo video](assets/demo.gif)](https://www.youtube.com/watch?v=qz2U6S5tWyQ)
 
 ## Installation 📦
 
