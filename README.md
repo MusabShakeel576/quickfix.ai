@@ -18,6 +18,12 @@ With Quickfix AI, you can:
 
 *If the video is not loading for you, [watch it on YouTube](https://www.youtube.com/watch?v=qz2U6S5tWyQ).*
 
+## Why Quickfix AI? 🤔
+
+Today's Gen AI dev tools, such as Copilot, are missing the mark. Yes, they help with code completion, but every developer knows that programming is really 20% coding and 80% debugging. I asked myself, how can LLMs help with the crucial, time-sensitive, frustrating, and just incredibly intense task of debugging? That's where Quickfix AI comes into play.
+
+Now let's get started!
+
 ## Installation 📦
 
 Quickfix AI is in its Alpha phase, if you would like to use and explore it at this stage, you can follow the steps below to set it up. However, if you prefer to wait for a more reliable version with an easy installation process through VS Code Marketplace, you can [Join the Waitlist](https://forms.gle/ZN4hmSuThpYAE8kZ7) for the Stable release.
