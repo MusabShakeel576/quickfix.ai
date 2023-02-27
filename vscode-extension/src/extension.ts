@@ -4,18 +4,24 @@ import { TextEncoder } from 'util'
 
 import { BACKEND_API_URL } from './env'
 
-export function activate(context: vscode.ExtensionContext) {
-	async function fetchSolution(input: string): Promise<string> {
-		const workspaceName = vscode.workspace.name
-		const documents = await readSourceCode()
+type RequestAPI = {
+	name: string;
+	input?: string;
+	documents?: string[];
+}
 
+export async function activate(context: vscode.ExtensionContext) {
+	// TODO: use proper return type instead of any
+	async function requestAPI(data: RequestAPI, endpoint: string): Promise<any> {
 		const response = await axios.post(
-			`${BACKEND_API_URL}/workspace`,
-			{ name: workspaceName, input: input, documents: documents }
+			`${BACKEND_API_URL}/workspace/${endpoint}`,
+			data
 		)
-
-		return response.data.solution.response
+		return response.data
 	}
+	const documents = await readSourceCode();
+	const data = {name: vscode.workspace.name, documents}
+	await requestAPI(data, "index")
 
 	async function readSourceCode(): Promise<string[]> {
 		const files = await vscode.workspace.findFiles('**/*')
@@ -59,9 +65,14 @@ export function activate(context: vscode.ExtensionContext) {
 			title: 'Quickfix AI is generating a solution'
 		}, async (progress) => {
 			progress.report({  increment: 0 });
-			
-			const solution = await fetchSolution(input)
-			await vscode.workspace.fs.writeFile(fileURI, new TextEncoder().encode(solution));
+
+			const data = {name: vscode.workspace.name, input}
+			const result = await requestAPI(data, "solution")
+
+			await vscode.workspace.fs.writeFile(
+				fileURI,
+				new TextEncoder().encode(result.solution.response)
+			);
 			await vscode.commands.executeCommand("markdown.showPreview", fileURI);
 			vscode.workspace.fs.delete(fileURI)
 			

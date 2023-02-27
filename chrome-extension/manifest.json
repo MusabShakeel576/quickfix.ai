@@ -1,0 +1,22 @@
+{
+    "name": "Quickfix AI",
+    "description": "Search on page with GPT.",
+    "version": "0.0.1",
+    "manifest_version": 3,
+    "icons": {
+        "128": "assets/icon-128.png"
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": "assets/icon-34.png"
+    },
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["scripts/content.js"]
+        }
+    ]
+}

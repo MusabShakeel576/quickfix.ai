@@ -119,3 +119,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Index storage files
+storage/*

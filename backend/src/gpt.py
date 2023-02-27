@@ -1,12 +1,22 @@
+from pathlib import Path
 from gpt_index import GPTSimpleVectorIndex, Document
 
+def generate_index(workspace):
+    file = workspace.name+'.json'
+    path = Path.cwd() / "storage" / file
+
+    if path.is_file():
+        index = GPTSimpleVectorIndex.load_from_disk(path)
+    else:
+        documents = [Document(document) for document in workspace.documents]
+        index = GPTSimpleVectorIndex(documents)
+        with open(path, 'w'):
+            pass
+        index.save_to_disk(path)
+        
+    return index
+
 def generate_solution(workspace) -> str:
-    documents = [Document(document) for document in workspace.documents]
-
-    # TODO: make it more optimized by storing and updating the vector index
-    # instead of creating a new one on every call
-    index = GPTSimpleVectorIndex(documents)
-
+    index = generate_index(workspace)
     response = index.query(workspace.input)
-
     return response
