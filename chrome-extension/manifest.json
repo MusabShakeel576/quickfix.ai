@@ -1,6 +1,6 @@
 {
     "name": "Quickfix AI",
-    "description": "Search on page with GPT.",
+    "description": "Search on page better than Chrome Find tool.",
     "version": "0.0.1",
     "manifest_version": 3,
     "icons": {
